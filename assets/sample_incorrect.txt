@@ -1,0 +1,36 @@
+Title of the test (always first line)
+---
+description
+===
+Question 1
+some text
+---
+o first option
+[] second option
+o third option
+---
+advice here
+===
+Each new question starts after 3 equal symbols. This is the second question. It will provide multiple options for an answer.
+For multiple options use brackets "[]". For this type of question number of correct answers can be 1 or more.
+When choosing type of question (one answer possible or multiple), signs that identify the type of a question "o" or "[]" should be consistent among all options,
+otherwise it will be considered as syntax error.
+---
+[] first option*
+[] second option*
+===
+This is the third question. As you see in the previous question there is no recommendation section, since it is optional.
+---
+o first option*
+o second option*
+o third option
+---
+Here put recommendations if answered wrong. This is the end of a sample test.
+===
+This is the third question. As you see in the previous question there is no recommendation section, since it is optional.
+---
+---
+Here put recommendations if answered wrong. This is the end of a sample test.
+===
+This is the third question. As you see in the previous question there is no recommendation section, since it is optional.
+Here put recommendations if answered wrong. This is the end of a sample test.

@@ -1,0 +1,35 @@
+Title of the test (always first line)
+---
+After 3 hyphen delimiter on line 3 there is a description of test.
+The number of lines for the test description is not limited.
+Use this section to describe aims of the test, topics covered in the test, etc.
+===
+This is the first question. Questions begins after 3 equals signs.
+Multiple lines can be used for question description. Questions can be short or elaborated.
+This question will provide one option to select in answers. Each option starts from new line. If only one option can be selected, start the option with the Latin 'o' symbol.
+Use asterisk at the end of an option to mark correct answer. Only one answer should be marked.
+Here the second option is correct
+---
+o first option
+o second option*
+o third option
+---
+This section is optional and can be omitted. Use it for recommendations that will be shown to a student at the end of the test if answer was incorrect.
+This section can be used to provide additional materials or advice for students on how they can improve their knowledge on a given topic.
+===
+Each new question starts after 3 equal symbols. This is the second question. It will provide multiple options for an answer.
+For multiple options use brackets "[]". For this type of question number of correct answers can be 1 or more.
+When choosing type of question (one answer possible or multiple), signs that identify the type of a question "o" or "[]" should be consistent among all options,
+otherwise it will be considered as syntax error. For this question there is no recommendation section, since it is optional.
+---
+[] first option
+[] second option*
+[] third option
+[] fourth option*
+===
+This is the third question.
+---
+o first option
+o second option*
+---
+Put recommendations here that will be shown to a student if answered wrong. This is the end of a sample test.

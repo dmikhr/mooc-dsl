@@ -1,0 +1,65 @@
+{
+	"quiz": {
+		"name": "Title of the test (always first line)",
+		"description": "description",
+		"questions": [
+			{
+				"text": "Question 1\nsome text",
+				"multiple": false,
+				"options": [
+					{
+						"text": "first option",
+						"isCorrect": false
+					},
+					{
+						"text": "second option",
+						"isCorrect": true
+					},
+					{
+						"text": "third option",
+						"isCorrect": false
+					}
+				],
+				"recommendation": "advice here\nsecond advice\nthird advice"
+			},
+			{
+				"text": "Question 2",
+				"multiple": true,
+				"options": [
+					{
+						"text": "first option",
+						"isCorrect": false
+					},
+					{
+						"text": "second option",
+						"isCorrect": true
+					},
+					{
+						"text": "third option",
+						"isCorrect": false
+					},
+					{
+						"text": "fourth option",
+						"isCorrect": true
+					}
+				],
+				"recommendation": ""
+			},
+			{
+				"text": "Question 3",
+				"multiple": false,
+				"options": [
+					{
+						"text": "first option",
+						"isCorrect": false
+					},
+					{
+						"text": "second option",
+						"isCorrect": true
+					}
+				],
+				"recommendation": "Here put recommendations if answered wrong\n"
+			}
+		]
+	}
+}

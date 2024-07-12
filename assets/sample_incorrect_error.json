@@ -1,0 +1,24 @@
+{
+	"errors": [
+		{
+			"lineNumber": 7,
+			"errDescription": "Inconsistent identifier for answer option 0"
+		},
+		{
+			"lineNumber": 7,
+			"errDescription": "No correct answers provided"
+		},
+		{
+			"lineNumber": 18,
+			"errDescription": "All answer options are correct"
+		},
+		{
+			"lineNumber": 23,
+			"errDescription": "Test options with \"o\" mark can have only one correct answer, found 2\""
+		},
+		{
+			"lineNumber": 31,
+			"errDescription": "No answers has been found"
+		}
+	]
+}

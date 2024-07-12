@@ -1,0 +1,28 @@
+Title of the test (always first line)
+---
+description
+===
+Question 1
+some text
+---
+o first option
+o second option*
+o third option
+---
+advice here
+second advice
+third advice
+===
+Question 2
+---
+[] first option
+[] second option*
+[] third option
+[] fourth option*
+===
+Question 3
+---
+o first option
+o second option*
+---
+Here put recommendations if answered wrong
