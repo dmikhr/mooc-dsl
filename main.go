@@ -135,7 +135,6 @@ func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
 			correctAnsw++
 		}
 	}
-	// slog.Info("correctAnsw", "", correctAnsw)
 	if correctAnsw == 0 {
 		logErr(offset+answRange.start, "No correct answers provided", errInfo)
 	} else if correctAnsw == len(answers) {
