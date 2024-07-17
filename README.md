@@ -11,3 +11,31 @@ Project provides two main features:
 * Parser which transforms DSL into JSON
 
 Check ```assets``` folder for samples of JSON output and sample tests.
+
+**Build instructions**
+
+Install Go
+
+From project directory run
+
+```
+go build main.go
+```
+
+and then 
+
+```
+./main
+```
+
+or build and run simultaneously
+
+```
+go build main.go && ./main
+```
+
+Use flag ```-fname``` to set filename of test
+
+```
+./main -fname=assets/sample_correct.txt
+```
