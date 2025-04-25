@@ -1,3 +1,8 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/dmikhr/mooc-dsl.svg)](https://pkg.go.dev/github.com/dmikhr/mooc-dsl)
+[![License](https://img.shields.io/github/license/dmikhr/mooc-dsl.svg)](LICENSE)
+
+
+
 MOOC DSL project aims to simplify the process of creating and managing educational tests across various platforms and systems.
 
 Tutors often face the challenge of adapting their test descriptions to different Learning Management Systems (LMS) and standalone software. Each system typically has its own syntax and format, requiring tutors to invest significant time in understanding and translating their test descriptions.
