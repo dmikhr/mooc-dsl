@@ -101,15 +101,14 @@ func logErr(lnum int, description string, errInfo *[]Incorrect) {
 }
 
 func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
-	// this func is only called if there are 1 or 2 separators hence index [0] exists
-	// getBlocks omits part before first separator, so answers are stored in element [0]
 	answRange := GetBlocks(&qlines, newSection, 0)[0]
 	answers := qlines[answRange.start : answRange.end+1]
-	//
+
 	if len(answers) == 0 {
 		logErr(offset+answRange.start, "No answers has been found", errInfo)
 		return
 	}
+
 	var identifier string
 	if strings.Index(answers[0], oneOpt) == 0 {
 		identifier = oneOpt
@@ -121,6 +120,7 @@ func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
 		logErr(offset+answRange.start, "Answer identifier is not supported", errInfo)
 		return
 	}
+
 	for i, answer := range answers[1:] {
 		slog.Info("Checking", "option", i+2, "answer", answer)
 		if strings.Index(answer, identifier) != 0 {
@@ -129,12 +129,14 @@ func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
 
 		}
 	}
+
 	var correctAnsw int
 	for _, answer := range answers {
 		if strings.Index(answer, correctSym) == len(answer)-1 {
 			correctAnsw++
 		}
 	}
+
 	if correctAnsw == 0 {
 		logErr(offset+answRange.start, "No correct answers provided", errInfo)
 	} else if correctAnsw == len(answers) {
@@ -153,6 +155,7 @@ func Parse(lines *[]string) Quiz {
 	var q Quiz
 	q.Name = (*lines)[0]
 	slog.Info("Parsing:", "quiz name", q.Name)
+
 	q.Description = func() string {
 		var descrLines []string
 		for i := 2; i < len(*lines); i++ {
@@ -163,8 +166,10 @@ func Parse(lines *[]string) Quiz {
 		}
 		return strings.Join(descrLines, "\n")
 	}()
+
 	slog.Info("Parsing:", "quiz description", q.Description)
 	qB := GetBlocks(lines, qsep, 2)
+
 	for i := 0; i < len(qB); i++ {
 		slog.Info("Parsing:", "question", i+1)
 		question := func() Question {
@@ -177,6 +182,7 @@ func Parse(lines *[]string) Quiz {
 					slog.Info("sectionN", "", sectionN, "j", j, "qB[i].end", qB[i].end)
 					continue
 				}
+
 				switch sectionN {
 				case 1:
 					qdescr = append(qdescr, (*lines)[j])
@@ -186,9 +192,11 @@ func Parse(lines *[]string) Quiz {
 					qrec = append(qrec, (*lines)[j])
 				}
 			}
+
 			qst.Text = strings.Join(qdescr, "\n")
 			var answ Answer
 			qst.Multiple = isMultiple(opts[0])
+
 			for _, opt := range opts {
 				if string(opt[len(opt)-1]) == correctSym {
 					answ = Answer{
@@ -201,17 +209,21 @@ func Parse(lines *[]string) Quiz {
 				}
 				qst.Options = append(qst.Options, answ)
 			}
+
 			qst.Recommendation = strings.Join(qrec, "\n")
 			return qst
 		}()
+
 		q.Questions = append(q.Questions, question)
 	}
+
 	return q
 }
 
 func SyntaxCheck(lines *[]string) []Incorrect {
 	var errInfo []Incorrect
 	var sep1 string
+
 	slog.Info("Syntax check: START")
 	_, err := GetItem(0, lines)
 	if err != nil {
@@ -221,6 +233,7 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 	} else {
 		slog.Info("Syntax check: Title ok")
 	}
+
 	sep1, err = GetItem(1, lines)
 	if err != nil {
 		errItem := Incorrect{LineNumber: 2,
@@ -236,15 +249,18 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 	} else {
 		slog.Info("Syntax check: Separator after title ok")
 	}
+
 	qB := GetBlocks(lines, qsep, 2)
 	slog.Info("Found questions", "total", len(qB))
 	slog.Info(fmt.Sprintf("Question blocks (here indexes not line nums): %v", qB))
+
 	if len(qB) == 0 {
 		errItem := Incorrect{LineNumber: len(*lines) - 1,
 			ErrDescription: "No questions found"}
 		slog.Warn(errItem.ErrDescription, "line:", errItem.LineNumber)
 		errInfo = append(errInfo, errItem)
 	}
+
 	for q := 0; q < len(qB); q++ {
 		slog.Info("Checking question", "N", q+1)
 		var secCount int
@@ -253,6 +269,7 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 				secCount++
 			}
 		}
+
 		// can be 1 or 2 by specs
 		if secCount == 0 || secCount > 3 {
 			slog.Warn("Number of separators error:", "line", qB[q].start+1, "current num",
@@ -263,23 +280,28 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 			answCheck((*lines)[qB[q].start:qB[q].end+1], qB[q].start, &errInfo)
 		}
 	}
+
 	slog.Info("Syntax check: FINISHED")
 	return errInfo
 }
 
 func saveJSON(data []byte, fname string, isErr bool) error {
 	var newSuffix string
+
 	if isErr {
 		newSuffix = "_error.json"
 	} else {
 		newSuffix = ".json"
 	}
+
 	data = append(data, '\n')
 	fname = strings.TrimSuffix(fname, ".txt") + newSuffix
 	err := os.WriteFile(fname, data, 0644)
+
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -317,6 +339,7 @@ func main() {
 	if err != nil {
 		log.Fatal("errInfo to JSON", err)
 	}
+
 	fmt.Println(string(errJson))
 	if len(errInfo) == 0 {
 		slog.Info("No errors found")
@@ -326,6 +349,7 @@ func main() {
 		if err != nil {
 			log.Fatal("Quiz to JSON", err)
 		}
+		
 		fmt.Println(string(qJson))
 		err = saveJSON(qJson, fpath, false)
 		if err != nil {
