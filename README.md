@@ -41,6 +41,17 @@ go build main.go && ./main
 
 Use flag ```-fname``` to set filename of test
 
+Usage example:
 ```
 ./main -fname=assets/sample_correct.txt
 ```
+
+Usage example with building binary (useful during development):
+```
+go build main.go && ./main -fname=assets/sample_correct.txt
+```
+
+then check `assets/sample_correct.json` for results.
+
+In case of errors report in json format will be produced with a name `sourcename_error.json`
+
