@@ -20,20 +20,30 @@ const (
 	multipleOpt = "[]"
 )
 
+// ErrWrap is a wrapper for struct for storing syntax errors
 type ErrWrap struct {
 	Incorrect []Incorrect `json:"errors"`
 }
 
+// Incorrect is a struct for storing incorrect data
+type Incorrect struct {
+	LineNumber     int    `json:"lineNumber"`
+	ErrDescription string `json:"errDescription"`
+}
+
+// QuizWrap is a wrapper for struct for storing quiz data
 type QuizWrap struct {
 	Quiz Quiz `json:"quiz"`
 }
 
+// Quiz is a struct for storing quiz data
 type Quiz struct {
 	Name        string     `json:"name"`
 	Description string     `json:"description"`
 	Questions   []Question `json:"questions"`
 }
 
+// Question is a struct for storing question data
 type Question struct {
 	Text           string   `json:"text"`
 	Multiple       bool     `json:"multiple"`
@@ -41,16 +51,13 @@ type Question struct {
 	Recommendation string   `json:"recommendation"`
 }
 
+// Answer is a struct for storing answer data
 type Answer struct {
 	Text      string `json:"text"`
 	IsCorrect bool   `json:"isCorrect"`
 }
 
-type Incorrect struct {
-	LineNumber     int    `json:"lineNumber"`
-	ErrDescription string `json:"errDescription"`
-}
-
+// isMultiple returns true if text contains marker for multiple choice option
 func isMultiple(text string) bool {
 	marker := text[:strings.Index(text, " ")]
 	switch marker {
@@ -62,24 +69,27 @@ func isMultiple(text string) bool {
 	return false
 }
 
+// trimMarker returns text without marker
 func trimMarker(text string) string {
 	return strings.TrimSpace(text[strings.Index(text, " ")+1:])
 }
 
+// GetItem returns element from slice by index
 func GetItem[T any](index int, elements *[]T) (T, error) {
 	var empty T
 	if index < len(*elements) {
 		return (*elements)[index], nil
-	} else {
-		return empty, errors.New("element doesn't exist")
 	}
+	return empty, errors.New("element doesn't exist")
 }
 
+// Block is a struct for storing block of lines
 type Block struct {
 	start int
 	end   int
 }
 
+// GetBlocks returns blocks of lines by separator
 func GetBlocks(lines *[]string, sep string, startIdx int) []Block {
 	var b []Block
 	for n := startIdx; n < len(*lines); n++ {
@@ -94,12 +104,14 @@ func GetBlocks(lines *[]string, sep string, startIdx int) []Block {
 	return b
 }
 
+// logErr logs error and adds it to errInfo
 func logErr(lnum int, description string, errInfo *[]Incorrect) {
 	errItem := Incorrect{LineNumber: lnum, ErrDescription: description}
 	slog.Warn(errItem.ErrDescription, "line:", errItem.LineNumber)
 	*errInfo = append(*errInfo, errItem)
 }
 
+// answCheck checks if answers are written using correct DSL syntax
 func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
 	answRange := GetBlocks(&qlines, newSection, 0)[0]
 	answers := qlines[answRange.start : answRange.end+1]
@@ -150,8 +162,8 @@ func answCheck(qlines []string, offset int, errInfo *[]Incorrect) {
 	}
 }
 
+// Parse parses quiz from lines
 func Parse(lines *[]string) Quiz {
-	// parse() runs after syntax check, so err check is more lenient here
 	var q Quiz
 	q.Name = (*lines)[0]
 	slog.Info("Parsing:", "quiz name", q.Name)
@@ -220,6 +232,7 @@ func Parse(lines *[]string) Quiz {
 	return q
 }
 
+// SyntaxCheck checks DSL syntax of quiz
 func SyntaxCheck(lines *[]string) []Incorrect {
 	var errInfo []Incorrect
 	var sep1 string
@@ -270,7 +283,7 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 			}
 		}
 
-		// can be 1 or 2 by specs
+		// can be 1 or 2 by DSL specs
 		if secCount == 0 || secCount > 3 {
 			slog.Warn("Number of separators error:", "line", qB[q].start+1, "current num",
 				secCount, "should be", "1 or 2", "in question ", q+1)
@@ -285,6 +298,7 @@ func SyntaxCheck(lines *[]string) []Incorrect {
 	return errInfo
 }
 
+// saveJSON saves quiz to file
 func saveJSON(data []byte, fname string, isErr bool) error {
 	var newSuffix string
 
@@ -335,28 +349,28 @@ func main() {
 	lines := strings.Split(string(data), "\n")
 
 	errInfo := SyntaxCheck(&lines)
-	errJson, err := json.MarshalIndent(ErrWrap{Incorrect: errInfo}, "", "\t")
+	errJSON, err := json.MarshalIndent(ErrWrap{Incorrect: errInfo}, "", "\t")
 	if err != nil {
 		log.Fatal("errInfo to JSON", err)
 	}
 
-	fmt.Println(string(errJson))
+	fmt.Println(string(errJSON))
 	if len(errInfo) == 0 {
 		slog.Info("No errors found")
 		q := Parse(&lines)
-		var qJson []byte
-		qJson, err = json.MarshalIndent(QuizWrap{Quiz: q}, "", "\t")
+		var qJSON []byte
+		qJSON, err = json.MarshalIndent(QuizWrap{Quiz: q}, "", "\t")
 		if err != nil {
 			log.Fatal("Quiz to JSON", err)
 		}
-		
-		fmt.Println(string(qJson))
-		err = saveJSON(qJson, fpath, false)
+
+		fmt.Println(string(qJSON))
+		err = saveJSON(qJSON, fpath, false)
 		if err != nil {
 			log.Fatal("Err while saving file", err)
 		}
 	} else {
-		err = saveJSON(errJson, fpath, true)
+		err = saveJSON(errJSON, fpath, true)
 		if err != nil {
 			log.Fatal("Err while saving file", err)
 		}
