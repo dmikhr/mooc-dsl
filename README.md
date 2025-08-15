@@ -1,8 +1,6 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/dmikhr/mooc-dsl.svg)](https://pkg.go.dev/github.com/dmikhr/mooc-dsl)
 [![License](https://img.shields.io/github/license/dmikhr/mooc-dsl.svg)](LICENSE)
 
-
-
 MOOC DSL project aims to simplify the process of creating and managing educational tests across various platforms and systems.
 
 Tutors often face the challenge of adapting their test descriptions to different Learning Management Systems (LMS) and standalone software. Each system typically has its own syntax and format, requiring tutors to invest significant time in understanding and translating their test descriptions.
@@ -21,37 +19,23 @@ Check ```assets``` folder for samples of JSON output and sample tests.
 
 Install Go
 
-From project directory run
+From project directory build binary using `make`
 
 ```
-go build main.go
-```
-
-and then 
-
-```
-./main
+make build
 ```
 
 or build and run simultaneously
 
 ```
-go build main.go && ./main
+make build-run
 ```
 
-Use flag ```-fname``` to set filename of test
+Check `Makefile` for other available commands.
 
-Usage example:
-```
-./main -fname=assets/sample_correct.txt
-```
+Available flags:
+* `--fname` to set filename of test
+* `--vebose` to print generate JSON in temrinal
+* `--showErrors` to print DSL syntax errors in temrinal
 
-Usage example with building binary (useful during development):
-```
-go build main.go && ./main -fname=assets/sample_correct.txt
-```
-
-then check `assets/sample_correct.json` for results.
-
-In case of errors report in json format will be produced with a name `sourcename_error.json`
-
+In case of errors in the source DSL code, an error report will be generated with the name `[sourcename]_error.json`
