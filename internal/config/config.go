@@ -1,3 +1,4 @@
+// Package config contains configuration constants
 package config
 
 const (
