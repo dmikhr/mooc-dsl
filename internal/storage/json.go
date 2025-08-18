@@ -1,3 +1,4 @@
+// Package storage contains functions for saving generated JSON to file
 package storage
 
 import (
