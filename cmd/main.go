@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"log/slog"
 	"os"
-	"strings"
 
 	"github.com/dmikhr/mooc-dsl/internal/config"
 	"github.com/dmikhr/mooc-dsl/internal/dsl"
@@ -30,23 +28,8 @@ func main() {
 		fpath = config.DefaultSourceFile
 	}
 
-	fmt.Println("File:", fpath)
-	file, err := os.Open(fpath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	data, err := io.ReadAll(file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	lines := strings.Split(string(data), "\n")
+	log.Println("Opening:", fpath)
+	lines := storage.LoadDSL(fpath)
 
 	errInfo := dsl.SyntaxCheck(&lines)
 	errJSON, err := json.MarshalIndent(dsl.ErrWrap{Incorrect: errInfo}, "", "\t")
